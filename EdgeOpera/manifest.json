@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "MeguProxy",
+  "version": "1.2",
+  "description": "Управление проксированием сайтов по правилам средствами SOCKS/HTTP.",
+  "permissions": [
+    "proxy",
+    "storage",
+    "tabs",
+    "alarms",
+    "webRequest",
+    "webRequestAuthProvider"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "icons": {
+    "64": "icon.png"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "MeguProxy",
+    "default_icon": {
+      "64": "icon.png"
+    }
+  }
+}
