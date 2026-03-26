@@ -1,0 +1,37 @@
+{
+  "manifest_version": 3,
+  "name": "MeguProxy",
+  "version": "1.1",
+  "description": "Управление проксированием сайтов по правилам средствами SOCKS/HTTP | Автор: t.me/shlyapniktgk",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "senkoproxy@cla.st",
+      "strict_min_version": "109.0",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    }
+  },
+  "incognito": "spanning",
+  "permissions": [
+    "proxy",
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "icons": {
+    "64": "icon.png"
+  },
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "SenkoProxy",
+    "default_icon": {
+      "48": "icon.png"
+    }
+  }
+}

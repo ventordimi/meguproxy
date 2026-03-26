@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { margin: 0; width: 380px; background: #1e1f22; color: #f2f3f5; font-family: Inter, Arial, sans-serif; }
+    .wrap { padding: 14px; }
+    .header { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 14px; font-size: 20px; font-weight: 700; color: #ffffff; }
+    .header img { width: 28px; height: 28px; border-radius: 8px; object-fit: cover; }
+    .tabs { display: flex; gap: 8px; margin-bottom: 14px; }
+    .tab { flex: 1; border: 0; border-radius: 10px; background: #2b2d31; color: #b5bac1; padding: 10px 0; font-size: 13px; font-weight: 600; cursor: pointer; text-align: center; transition: 0.15s; }
+    .tab.active { background: #5865f2; color: #ffffff; }
+    .panel { display: none; }
+    .panel.active { display: block; }
+    .card { background: #2b2d31; border-radius: 14px; padding: 12px; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset; }
+    .label { font-size: 11px; text-transform: uppercase; color: #b5bac1; margin: 0 0 6px; font-weight: 700; }
+    .row { display: flex; gap: 8px; }
+    .inputWrap { display: flex; align-items: center; gap: 8px; background: #1e1f22; border-radius: 10px; padding: 0 10px; margin-bottom: 12px; }
+    .inputWrap input { flex: 1; border: 0; outline: 0; background: transparent; color: #f2f3f5; padding: 12px 0; font-size: 13px; }
+    .statusIcon { width: 24px; text-align: center; font-size: 18px; }
+    input[type="text"], input[type="number"], select { width: 100%; box-sizing: border-box; border: 0; outline: 0; background: #1e1f22; color: #f2f3f5; padding: 12px; border-radius: 10px; font-size: 13px; margin-bottom: 12px; }
+    button { border: 0; border-radius: 10px; padding: 11px 12px; font-size: 13px; font-weight: 700; cursor: pointer; transition: 0.15s ease; }
+    .primary { background: #5865f2; color: #fff; flex: 1; }
+    .primary:hover { background: #4752c4; }
+    .danger { background: #da373c; color: #fff; flex: 1; }
+    .danger:hover { background: #b52d31; }
+    .secondary { width: 100%; background: #404249; color: #fff; margin-top: 4px; }
+    .secondary:hover { background: #4e5058; }
+    .hint { min-height: 18px; text-align: center; font-size: 12px; color: #57f287; margin-top: 8px; }
+    .footer { text-align: center; font-size: 11px; color: #949ba4; margin-top: 12px; }
+    .footer a { color: #00a8fc; text-decoration: none; }
+    .list-item { background: #1e1f22; border-radius: 8px; padding: 10px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 12px; }
+    .list-item .info { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px; }
+    .list-item .del { color: #da373c; cursor: pointer; font-weight: bold; padding: 5px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="header"><span>MeguProxy</span><img src="icon.png" alt="icon"></div>
+    <div class="tabs">
+      <div id="tabRules" class="tab active">Правила</div>
+      <div id="tabProxy" class="tab">Прокси</div>
+      <div id="tabLists" class="tab">Списки</div>
+    </div>
+
+    <div id="panelRules" class="panel active">
+      <div class="card">
+        <div class="label">Текущий домен</div>
+        <div class="inputWrap">
+          <input id="domainInput" type="text" placeholder="*.example.com">
+          <div id="statusIcon" class="statusIcon">❌</div>
+        </div>
+        <div class="row">
+          <button id="addRuleBtn" class="primary">Добавить</button>
+          <button id="removeRuleBtn" class="danger">Удалить</button>
+        </div>
+        <button id="openListBtn" class="secondary">Текстовый редактор правил</button>
+        <div id="rulesStatus" class="hint"></div>
+      </div>
+    </div>
+
+    <div id="panelProxy" class="panel">
+      <div class="card">
+        <div class="label">Тип прокси</div>
+        <select id="proxyType">
+          <option value="socks">SOCKS5</option>
+          <option value="http">HTTP</option>
+          <option value="https">HTTPS</option>
+        </select>
+        <div class="label">IP адрес / Хост</div>
+        <input id="proxyHost" type="text" placeholder="127.0.0.1">
+        <div class="label">Порт</div>
+        <input id="proxyPort" type="number" placeholder="1080">
+        <button id="saveProxyBtn" class="primary" style="width:100%;">Сохранить настройки</button>
+        <div id="proxyStatus" class="hint"></div>
+      </div>
+    </div>
+
+    <div id="panelLists" class="panel">
+      <div class="card">
+        <div class="label">URL списка (.txt / AdGuard)</div>
+        <input id="listUrl" type="text" placeholder="https://.../filter.txt">
+        <div class="label">Действие для доменов из списка</div>
+        <select id="listAction">
+          <option value="proxy">Проксировать (Обход)</option>
+          <option value="block">Блокировать (Реклама/Трекеры)</option>
+        </select>
+        <button id="addListBtn" class="primary" style="width:100%;">Скачать и применить список</button>
+        <button id="toggleListsBtn" class="secondary" style="display:none;">Управление списками (0)</button>
+        <div id="listsContainer" style="margin-top: 10px; max-height: 160px; overflow-y: auto; display: none;"></div>
+        <div id="listStatus" class="hint"></div>
+      </div>
+    </div>
+
+    <div class="footer">Автор: <a href="https://t.me/shlyapniktgk" target="_blank">@shlyapniktgk</a></div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
